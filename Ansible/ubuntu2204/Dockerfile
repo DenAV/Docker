@@ -14,14 +14,15 @@ LABEL maintainer="DenAV" \
     org.label-schema.vcs-ref=$VCS_REF
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    apt-get install -y python3-pip sshpass && \
+    apt-get install -y python3-pip sshpass openssh-server openssh-client && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
-RUN python3 -m pip install --upgrade pip && \
+RUN python3 -m pip install --upgrade pip cffi && \
     pip install ansible==${ANSIBLE_VERSION} && \
+    pip install mitogen ansible-lint jmespath && \
     pip install --upgrade pywinrm && \
-    pip install netaddr && \
+    pip install netaddr net-tools && \
     rm -rf /root/.cache/pip
 
 RUN mkdir /ansible && \
